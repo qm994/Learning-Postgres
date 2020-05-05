@@ -16,14 +16,29 @@ cursor.execute('''
 
 cursor.execute('INSERT INTO table2 (id, complete) VALUES (%s, %s);', (1, True))
 
-cursor.execute('''
-INSERT INTO table2 (id, complete) VALUES (%(id)s, %(complete)s);
-''',
-{
+SQL = 'INSERT INTO table2 (id, complete) VALUES (%(id)s, %(complete)s);'
+data = {
     "id": 2,
     "complete": False
 }
-)
+cursor.execute(SQL, data)
+
+cursor.execute('INSERT INTO table2 (id, complete) VALUES (%s, %s);', (3, True))
+
+# `cursor.fetchall` will be used to fetch all the data from the previous `select` execute,
+# and assign it to `all`
+cursor.execute('SELECT * FROM table2;')
+
+# all = cursor.fetchall()
+# print("fetchall", all)
+many = cursor.fetchmany(2)
+print("fetch 2 left 1", many)
+
+onlyone = cursor.fetchone()
+print("fetchone", onlyone)
+
+
+
 
 # cursor.execute will not execute the commands in sql immediately, it need to commit first,
 # so here we commit both as a whole unit
